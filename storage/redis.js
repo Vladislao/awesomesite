@@ -4,7 +4,7 @@ var Redis = function(){
     this.get = function(collection, key){
         // check collection
         if(this.entities.hasOwnProperty(collection) == false)
-            return null;
+            return [];
         // check item in collection
         var entities = this.entities[collection];
         if (entities.hasOwnProperty(key) == false)

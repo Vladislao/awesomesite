@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" ng-app="awesome">
 <head>
     <meta charset="UTF-8">
     <title>Aaawesomesite</title>
@@ -8,6 +8,12 @@
     <link rel="stylesheet" href="/css/sheet.css"/>
 </head>
 <body>
-    <iframe class="fullscreen" src="http://htmlbook.ru/html/iframe" frameborder="0"></iframe>
+    <div ng-view></div>
+    <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.2.4/angular.min.js"></script>
+    <script src="//code.angularjs.org/1.2.4/angular-route.min.js"></script>
+    <script src="/js/app.js"></script>
+    <script src="/js/controller/FrameController.js"></script>
+    <script src="/js/controller/SelectController.js"></script>
+    <script src="/js/service/CommentService.js"></script>
 </body>
 </html>
