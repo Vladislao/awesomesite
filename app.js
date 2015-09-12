@@ -12,6 +12,7 @@ var bodyParser = require('body-parser');
 var query = require('connect-query');
 // static files handling
 var serveStatic = require('serve-static');
+var favicon = require('serve-favicon');
 //</editor-fold>
 //<editor-fold desc="INTERNAL LIBS">
 // policies
@@ -34,7 +35,8 @@ app.use('/', function(req, res, next){
     res.setHeader('X-Frame-Options', 'ALLOWALL');
     next();
 });
-
+// favicon
+app.use(favicon(__dirname + '/public/favicon.ico'));
 // static files
 app.use('/', serveStatic(__dirname + '/public'));
 
