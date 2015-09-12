@@ -27,6 +27,7 @@ app.use(compression());
 //app.use(cookieSession({
 //    keys: ['secret1', 'secret2']
 //}));
+
 app.use(query());
 app.use(bodyParser.json());
 
@@ -36,7 +37,7 @@ app.use('/', function(req, res, next){
     next();
 });
 // favicon
-app.use(favicon(__dirname + '/public/favicon.ico'));
+app.use(favicon(__dirname + '/public/favicon.png'));
 // static files
 app.use('/', serveStatic(__dirname + '/public'));
 
