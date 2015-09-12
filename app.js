@@ -19,7 +19,7 @@ var favicon = require('serve-favicon');
 //var webPolicy = require('./policies/web');
 // routes
 var webRoute = require('./routes/web');
-//var apiRoute = require('./routes/api');
+var apiRoute = require('./routes/api');
 //</editor-fold>
 
 var app = connect();
@@ -43,7 +43,7 @@ app.use('/', serveStatic(__dirname + '/public'));
 
 // controllers
 app.use('/', webRoute);
-//app.use('/api/', apiRoute);
+app.use('/api/', apiRoute);
 
 //app.use(function onerror(err, req, res, next) {
 //    res.end(err.message);
