@@ -29,6 +29,12 @@ app.use(compression());
 app.use(query());
 app.use(bodyParser.json());
 
+// iframe hack
+app.use('/', function(req, res, next){
+    res.setHeader('X-Frame-Options', 'ALLOWALL');
+    next();
+});
+
 // static files
 app.use('/', serveStatic(__dirname + '/public'));
 
