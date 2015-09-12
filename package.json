@@ -12,6 +12,19 @@
   },
   "author": "",
   "license": "ISC",
+  "dependencies": {
+    "body-parser": "^1.13.3",
+    "compression": "^1.5.2",
+    "connect": "^3.4.0",
+    "connect-query": "^0.2.0",
+    "connect-route": "^0.1.5",
+    "serve-static": "^1.10.0"
+  },
+  "devDependencies": {
+    "mocha": "^2.3.0",
+    "should": "^7.1.0",
+    "supertest": "^1.1.0"
+  },
   "bugs": {
     "url": "https://github.com/Vladislao/awesomesite/issues"
   }
