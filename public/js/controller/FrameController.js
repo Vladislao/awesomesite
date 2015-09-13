@@ -58,7 +58,9 @@ awesome.controller('FrameController',
         // click on frame
         function click(e){
             var coord = getCrossBrowserElementCoords(e);
-            console.log(coord);
+
+            coord.x -= 18;
+            coord.y -= 18;
 
             var key = getKey(coord);
             if($scope.groups.hasOwnProperty(key) == false)

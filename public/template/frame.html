@@ -1,5 +1,5 @@
 <div>
-    <!--<iframe ng-if="frame != null" frameborder="0" scrolling="no" ng-src="{{frame}}" class="fullscreen" frameborder="0"></iframe>-->
+    <iframe ng-if="frame != null" frameborder="0" scrolling="no" ng-src="{{frame}}" class="fullscreen" frameborder="0"></iframe>
 
     <div ng-mousedown="frameCtrl.click($event);"  class="comment-frame">
         <div ng-repeat="value in groups" ng-mousedown="frameCtrl.groupClick($event, value);">
