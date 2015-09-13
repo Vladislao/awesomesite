@@ -1,7 +1,7 @@
 'use strict';
 
 awesome.controller('FrameController',
-    function FrameController($scope, $routeParams, $sce, commentService) {
+    function FrameController($scope, $routeParams, $sce, $interval, commentService) {
 
         var self = this;
 
@@ -13,40 +13,41 @@ awesome.controller('FrameController',
         $scope.frame = null;
 
         var link = null;
+        var timer = null;
         var open = {};
+        var commentMap = {};
 
         function init(){
             link = $routeParams.link;
             commentService.getLink(link).then(function(data){
                 $scope.frame = $sce.trustAsResourceUrl(data.data);
             });
-            commentService.get(link).then(function(data){
-                data.data.forEach(function(comment){
-                    var key = getKey(comment.Coord);
-                    if($scope.groups.hasOwnProperty(key) == false){
-                        $scope.groups[key] = {
-                            show: false,
-                            coord: comment.Coord,
-                            comments: []
-                        }
-                    }
-                    $scope.groups[key].comments.push({
-                        Text: comment.Text,
-                        Date: new Date(comment.Date)
-                    });
-                });
-            });
+            commentService.get(link).then(handleComments);
+
+            timer = $interval(function(){
+                commentService.get(link).then(handleComments);
+            }, 1000);
         }
         init();
+
+        $scope.$on("$destroy", function() {
+            if (timer) {
+                $interval.cancel(timer);
+            }
+        });
 
         // add comment
         function add(e, group, text){
             e.stopPropagation();
-            group.comments.push({
-                Text: text,
-                Date: new Date()
+            commentService.add(link, group.coord, text).then(function(data){
+                var id = data.data;
+                commentMap[id] = null;
+                group.comments.push({
+                    Id: id,
+                    Text: text,
+                    Date: new Date()
+                });
             });
-            commentService.add(link, group.coord, text);
         }
 
         // click on group
@@ -71,6 +72,27 @@ awesome.controller('FrameController',
 
             swapOpen($scope.groups[key]);
             //$scope.groups[key].comments.push({Text:'some comment', Date: new Date()});
+        }
+
+        function handleComments(data){
+            data.data.forEach(function(comment){
+                if(commentMap.hasOwnProperty(comment.Id))
+                    return;
+
+                commentMap[comment.Id] = null;
+                var key = getKey(comment.Coord);
+                if($scope.groups.hasOwnProperty(key) == false){
+                    $scope.groups[key] = {
+                        show: false,
+                        coord: comment.Coord,
+                        comments: []
+                    }
+                }
+                $scope.groups[key].comments.push({
+                    Text: comment.Text,
+                    Date: new Date(comment.Date)
+                });
+            });
         }
 
         // create group key

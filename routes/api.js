@@ -41,13 +41,15 @@ var webRoute = connectRoute(function (router) {
 
         var key = req.body.key;
         var comment = {
+            Id: shortid.generate(),
             Coord: req.body.coord,
             Text: req.body.text,
             Date: new Date().getTime()
         };
 
         redis.push('comments', key, comment);
-        res.end();
+        res.setHeader('Content-Type', 'application/json');
+        res.end(comment.Id);
     });
 });
 
