@@ -1,7 +1,7 @@
 'use strict';
 
 awesome.controller('FrameController',
-    function FrameController($scope, $routeParams, commentService) {
+    function FrameController($scope, $routeParams, $sce, commentService) {
 
         var self = this;
 
@@ -10,15 +10,32 @@ awesome.controller('FrameController',
         self.groupClick = groupClick;
 
         $scope.groups = {};
+        $scope.frame = null;
+
+        var link = null;
         var open = {};
 
         function init(){
-            var link = $routeParams.link;
-            //commentService.get(link).then(function(data){
-            //    //data.data.forEach(function(comment){
-            //    //});
-            //    $scope.groups = data.data;
-            //});
+            link = $routeParams.link;
+            commentService.getLink(link).then(function(data){
+                $scope.frame = $sce.trustAsResourceUrl(data.data);
+            });
+            commentService.get(link).then(function(data){
+                data.data.forEach(function(comment){
+                    var key = getKey(comment.Coord);
+                    if($scope.groups.hasOwnProperty(key) == false){
+                        $scope.groups[key] = {
+                            show: false,
+                            coord: comment.Coord,
+                            comments: []
+                        }
+                    }
+                    $scope.groups[key].comments.push({
+                        Text: comment.Text,
+                        Date: new Date(comment.Date)
+                    });
+                });
+            });
         }
         init();
 
@@ -29,6 +46,7 @@ awesome.controller('FrameController',
                 Text: text,
                 Date: new Date()
             });
+            commentService.add(link, group.coord, text);
         }
 
         // click on group

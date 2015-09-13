@@ -1,5 +1,6 @@
 <div>
-    <!--<iframe frameborder="0" scrolling="no" class="fullscreen" src="http://htmlbook.ru/html/iframe" frameborder="0"></iframe>-->
+    <iframe ng-if="frame != null" frameborder="0" scrolling="no" ng-src="{{frame}}" class="fullscreen" frameborder="0"></iframe>
+
     <div ng-mousedown="frameCtrl.click($event);"  class="comment-frame">
         <div ng-repeat="value in groups" class="comment-group"
              ng-style="{'left': value.coord.x + 'px', 'top': value.coord.y + 'px'}"

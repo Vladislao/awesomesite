@@ -1,14 +1,16 @@
 'use strict';
 
 awesome.controller('SelectController',
-    function SelectController($scope, $location) {
+    function SelectController($scope, $location, commentService) {
 
         var self = this;
 
         self.submit = submit;
 
         function submit(){
-            $location.path("/watch/" + $scope.text);
+            commentService.setLink($scope.text).then(function(data){
+                $location.path("/watch/" + data.data);
+            });
         }
 
     });
