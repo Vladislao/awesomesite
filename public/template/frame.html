@@ -1,3 +1,19 @@
 <div>
-    <iframe class="fullscreen" src="http://htmlbook.ru/html/iframe" frameborder="0"></iframe>
+    <!--<iframe frameborder="0" scrolling="no" class="fullscreen" src="http://htmlbook.ru/html/iframe" frameborder="0"></iframe>-->
+    <div ng-mousedown="frameCtrl.click($event);"  class="comment-frame">
+        <div ng-repeat="value in groups" class="comment-group"
+             ng-style="{'left': value.coord.x + 'px', 'top': value.coord.y + 'px'}"
+                ng-mousedown="frameCtrl.groupClick($event, value);">
+            <div ng-show="value.show" class="comment-box">
+                <div class="comment"  ng-repeat="comment in value.comments">
+                    {{comment.Date}}: {{comment.Text}}
+                </div>
+                <form action="" ng-submit="frameCtrl.add($event, value, text); text='';">
+                    <input type="text" ng-model="text" name="text" placeholder="type your comment" />
+                    <input type="submit" value="+"/>
+                </form>
+            </div>
+        </div>
+    </div>
+    <!--<div class="comment-box"></div>-->
 </div>

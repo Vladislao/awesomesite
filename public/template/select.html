@@ -1,5 +1,5 @@
 <div class="center">
-    <form ng-submit="selectCtrl.submit()">
+    <form ng-submit="selectCtrl.submit($event);">
         <input ng-model="text" name="text" type="text" placeholder="Some url"/>
         <input value="Open" type="submit" />
     </form>

@@ -6,19 +6,126 @@ awesome.controller('FrameController',
         var self = this;
 
         self.add = add;
-        self.comments = [];
+        self.click = click;
+        self.groupClick = groupClick;
+
+        $scope.groups = {};
+        var open = {};
 
         function init(){
             var link = $routeParams.link;
-            commentService.get(link).then(function(data){
-                self.comments = data.data;
-                console.log(data.data);
-            });
+            //commentService.get(link).then(function(data){
+            //    //data.data.forEach(function(comment){
+            //    //});
+            //    $scope.groups = data.data;
+            //});
         }
         init();
 
-        function add(){
-            console.log('add');
+        // add comment
+        function add(e, group, text){
+            e.stopPropagation();
+            group.comments.push({
+                Text: text,
+                Date: new Date()
+            });
+        }
+
+        // click on group
+        function groupClick(e, group){
+            e.stopPropagation();
+            swapOpen(group);
+        }
+
+        // click on frame
+        function click(e){
+            var coord = getCrossBrowserElementCoords(e);
+            console.log(coord);
+
+            var key = getKey(coord);
+            if($scope.groups.hasOwnProperty(key) == false)
+                $scope.groups[key] = {
+                    coord: coord,
+                    comments: []
+                };
+
+            swapOpen($scope.groups[key]);
+            //$scope.groups[key].comments.push({Text:'some comment', Date: new Date()});
+        }
+
+        // create group key
+        function getKey(coord){
+            return coord.x + ',' + coord.y;
+        }
+
+        // swap open group to another
+        function swapOpen(group){
+            // skip self
+            if(open === group)
+                return;
+            // swap
+            open.show = false;
+            if(open.comments != null && open.comments.length === 0)
+                delete $scope.groups[getKey(open.coord)];
+
+            open = group;
+            open.show = true;
+        }
+
+        // Accepts a MouseEvent as input and returns the x and y
+        // coordinates relative to the target element.
+        function getCrossBrowserElementCoords(mouseEvent)
+        {
+            var result = {
+                x: 0,
+                y: 0
+            };
+
+            if (!mouseEvent)
+            {
+                mouseEvent = window.event;
+            }
+
+            if (mouseEvent.pageX || mouseEvent.pageY)
+            {
+                result.x = mouseEvent.pageX;
+                result.y = mouseEvent.pageY;
+            }
+            else if (mouseEvent.clientX || mouseEvent.clientY)
+            {
+                result.x = mouseEvent.clientX + document.body.scrollLeft +
+                    document.documentElement.scrollLeft;
+                result.y = mouseEvent.clientY + document.body.scrollTop +
+                    document.documentElement.scrollTop;
+            }
+
+            if (mouseEvent.target)
+            {
+                var offEl = mouseEvent.target;
+                var offX = 0;
+                var offY = 0;
+
+                if (typeof(offEl.offsetParent) != "undefined")
+                {
+                    while (offEl)
+                    {
+                        offX += offEl.offsetLeft;
+                        offY += offEl.offsetTop;
+
+                        offEl = offEl.offsetParent;
+                    }
+                }
+                else
+                {
+                    offX = offEl.x;
+                    offY = offEl.y;
+                }
+
+                result.x -= offX;
+                result.y -= offY;
+            }
+
+            return result;
         }
 
     });
