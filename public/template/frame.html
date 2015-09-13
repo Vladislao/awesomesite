@@ -1,18 +1,25 @@
 <div>
-    <iframe ng-if="frame != null" frameborder="0" scrolling="no" ng-src="{{frame}}" class="fullscreen" frameborder="0"></iframe>
+    <!--<iframe ng-if="frame != null" frameborder="0" scrolling="no" ng-src="{{frame}}" class="fullscreen" frameborder="0"></iframe>-->
 
     <div ng-mousedown="frameCtrl.click($event);"  class="comment-frame">
-        <div ng-repeat="value in groups" class="comment-group"
-             ng-style="{'left': value.coord.x + 'px', 'top': value.coord.y + 'px'}"
-                ng-mousedown="frameCtrl.groupClick($event, value);">
-            <div ng-show="value.show" class="comment-box">
-                <div class="comment"  ng-repeat="comment in value.comments">
-                    {{comment.Date}}: {{comment.Text}}
+        <div ng-repeat="value in groups" ng-mousedown="frameCtrl.groupClick($event, value);">
+            <div class="comment-group"
+                 ng-style="{'left': value.coord.x + 'px', 'top': value.coord.y + 'px', 'width': 30 + value.comments.length + 'px', 'height': 30 + value.comments.length + 'px'}"
+            >
+                <div class="height_fix"></div>
+                <div class="content">{{value.comments.length}}</div>
+
+                <div ng-show="value.show" class="comment-box" ng-style="{'left': 50 + value.comments.length + 'px'}">
+                    <div class="comment"  ng-repeat="comment in value.comments">
+                        <span class="time">{{comment.Date.formatDate('dd/MM/yy в HH:mm')}}: </span>
+                        <span>{{comment.Text}}</span>
+                        <hr/>
+                    </div>
+                    <form action="" ng-submit="frameCtrl.add($event, value, text); text='';">
+                        <input type="text" ng-model="text" name="text" placeholder="type your comment" />
+                        <input type="submit" value="+"/>
+                    </form>
                 </div>
-                <form action="" ng-submit="frameCtrl.add($event, value, text); text='';">
-                    <input type="text" ng-model="text" name="text" placeholder="type your comment" />
-                    <input type="submit" value="+"/>
-                </form>
             </div>
         </div>
     </div>
